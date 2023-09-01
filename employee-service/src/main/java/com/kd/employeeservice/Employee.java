@@ -17,7 +17,7 @@ public class Employee {
     private String email;
 
     @Column(name = "current_company_id")
-    private String currentCompanyId;
+    private Integer currentCompanyId;
     @Column(name = "experience")
     private Integer experience;
 
@@ -53,11 +53,11 @@ public class Employee {
         this.email = email;
     }
 
-    public String getCurrentCompanyId() {
+    public Integer getCurrentCompanyId() {
         return currentCompanyId;
     }
 
-    public void setCurrentCompanyId(String currentCompanyId) {
+    public void setCurrentCompanyId(Integer currentCompanyId) {
         this.currentCompanyId = currentCompanyId;
     }
 
