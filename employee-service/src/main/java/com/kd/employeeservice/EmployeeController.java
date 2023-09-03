@@ -27,8 +27,20 @@ public class EmployeeController {
     }
 
     @PostMapping(value = "/employees", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EmployeeResponse>> allEmployeesWith(@RequestBody EmployeesRequest  employeesRequest) {
+    public ResponseEntity<List<EmployeeResponse>> allEmployeesWith(@RequestBody EmployeesRequest employeesRequest) {
         List<EmployeeResponse> employeeResponseList = employeeService.allEmployeesWith(employeesRequest);
         return ResponseEntity.status(HttpStatus.OK).body(employeeResponseList);
+    }
+
+    @PutMapping("/employee/create")
+    public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody Employee employee) {
+        EmployeeResponse savedEmployee = employeeService.createEmployee(employee);
+        return ResponseEntity.status(HttpStatus.OK).body(savedEmployee);
+    }
+
+    @PostMapping("/employee")
+    public ResponseEntity<EmployeeResponse> updateEmployee(@RequestBody Employee employee) {
+        EmployeeResponse savedEmployee = employeeService.updatedEmployee(employee);
+        return ResponseEntity.status(HttpStatus.OK).body(savedEmployee);
     }
 }

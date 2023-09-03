@@ -76,4 +76,24 @@ public class EmployeeService {
         employeeResponseList.stream().filter(it -> it.getCurrentCompany() != null).forEach(empRes -> empRes.setCurrentCompany(restTemplate.getForObject("/company/{id}", CompanyResponse.class, empRes.getCurrentCompany().getId())));
         return employeeResponseList;
     }
+
+    public EmployeeResponse createEmployee(Employee employee) {
+        Employee newCreatedEmp = employeeRepo.saveAndFlush(employee);
+        EmployeeResponse employeeResponse = modelMapper.map(newCreatedEmp, EmployeeResponse.class);
+        employeeResponse.setCurrentCompany(restTemplate.getForObject("/company/{id}", CompanyResponse.class, employee.getCurrentCompanyId()));
+        return employeeResponse;
+    }
+
+    public EmployeeResponse updatedEmployee(Employee employee) {
+        Employee emp = employeeRepo.getReferenceById(employee.getId());
+        emp.setName(employee.getName());
+        emp.setEmail(employee.getEmail());
+        emp.setCurrentCompanyId(employee.getCurrentCompanyId());
+        emp.setBloodgroup(employee.getBloodgroup());
+        emp.setExperience(employee.getExperience());
+        Employee updatedEmp = employeeRepo.saveAndFlush(employee);
+        EmployeeResponse employeeResponse = modelMapper.map(updatedEmp, EmployeeResponse.class);
+        employeeResponse.setCurrentCompany(restTemplate.getForObject("/company/{id}", CompanyResponse.class, employee.getCurrentCompanyId()));
+        return employeeResponse;
+    }
 }
