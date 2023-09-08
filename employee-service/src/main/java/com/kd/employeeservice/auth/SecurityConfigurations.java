@@ -1,5 +1,6 @@
 package com.kd.employeeservice.auth;
 
+import com.kd.employeeservice.auth.security.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +19,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfigurations {
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+    public JwtAuthTokenFilter jwtAuthenticationFilter() {
+        return new JwtAuthTokenFilter();
     }
 
     @Bean
-    public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint() {
-        return new JwtAuthenticationEntryPoint();
+    public AuthEntryPointJwt jwtAuthenticationEntryPoint() {
+        return new AuthEntryPointJwt();
     }
 
     @Bean

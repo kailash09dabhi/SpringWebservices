@@ -1,4 +1,4 @@
-package com.kd.employeeservice.auth;
+package com.kd.employeeservice.auth.security.jwt;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
