@@ -8,16 +8,13 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class Configurations {
 
-    @Bean
-    public ModelMapper modalMapper() {
-        return new ModelMapper();
-    }
+  @Bean
+  public ModelMapper modalMapper() {
+    return new ModelMapper();
+  }
 
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
+  @Bean
+  public RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
 }
-

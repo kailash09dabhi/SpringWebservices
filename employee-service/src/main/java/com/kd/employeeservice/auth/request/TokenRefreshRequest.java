@@ -1,11 +1,9 @@
 package com.kd.employeeservice.auth.request;
 
-
 import jakarta.validation.constraints.NotBlank;
 
 public class TokenRefreshRequest {
-  @NotBlank
-  private String refreshToken;
+  @NotBlank private String refreshToken;
 
   public String getRefreshToken() {
     return refreshToken;

@@ -33,5 +33,4 @@ public class TokenRefreshResponse {
   public void setTokenType(String tokenType) {
     this.tokenType = tokenType;
   }
-
 }

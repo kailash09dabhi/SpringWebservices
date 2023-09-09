@@ -1,71 +1,80 @@
 package com.kd.employeeservice;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "employee")
 public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-    @Column(name = "bloodgroup")
-    private String bloodgroup;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "email")
-    private String email;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Integer id;
 
-    @Column(name = "current_company_id")
-    private Integer currentCompanyId;
-    @Column(name = "experience")
-    private Integer experience;
+  @Column(name = "bloodgroup")
+  private String bloodgroup;
 
-    public Integer getId() {
-        return id;
-    }
+  @Column(name = "name")
+  private String name;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  @Column(name = "email")
+  private String email;
 
-    public String getBloodgroup() {
-        return bloodgroup;
-    }
+  @Column(name = "current_company_id")
+  private Integer currentCompanyId;
 
-    public void setBloodgroup(String bloodgroup) {
-        this.bloodgroup = bloodgroup;
-    }
+  @Column(name = "experience")
+  private Integer experience;
 
-    public String getName() {
-        return name;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getBloodgroup() {
+    return bloodgroup;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setBloodgroup(String bloodgroup) {
+    this.bloodgroup = bloodgroup;
+  }
 
-    public Integer getCurrentCompanyId() {
-        return currentCompanyId;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setCurrentCompanyId(Integer currentCompanyId) {
-        this.currentCompanyId = currentCompanyId;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public Integer getExperience() {
-        return experience;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setExperience(Integer experience) {
-        this.experience = experience;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public Integer getCurrentCompanyId() {
+    return currentCompanyId;
+  }
+
+  public void setCurrentCompanyId(Integer currentCompanyId) {
+    this.currentCompanyId = currentCompanyId;
+  }
+
+  public Integer getExperience() {
+    return experience;
+  }
+
+  public void setExperience(Integer experience) {
+    this.experience = experience;
+  }
 }
