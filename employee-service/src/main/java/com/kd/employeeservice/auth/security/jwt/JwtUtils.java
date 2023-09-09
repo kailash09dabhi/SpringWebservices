@@ -2,6 +2,7 @@ package com.kd.employeeservice.auth.security.jwt;
 
 // import com.kd.employeeservice.auth.security.UserDetailsImpl;
 
+import com.kd.employeeservice.auth.security.UserDetailsImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -24,9 +25,9 @@ public class JwtUtils {
   @Value("${kd.auth.jwtExpirationMs}")
   private int jwtExpirationMs;
 
-  //    public String generateJwtToken(UserDetailsImpl userPrincipal) {
-  //        return generateTokenFromUsername(userPrincipal.getUsername());
-  //    }
+  public String generateJwtToken(UserDetailsImpl userPrincipal) {
+    return generateTokenFromUsername(userPrincipal.getUsername());
+  }
 
   public String generateTokenFromUsername(String username) {
     return Jwts.builder()

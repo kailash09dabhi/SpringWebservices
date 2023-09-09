@@ -1,5 +1,6 @@
 package com.kd.employeeservice.auth;
 
+import com.kd.employeeservice.auth.security.UserDetailsServiceImpl;
 import com.kd.employeeservice.auth.security.jwt.AuthEntryPointJwt;
 import com.kd.employeeservice.auth.security.jwt.JwtAuthTokenFilter;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +47,8 @@ public class SecurityConfigurations {
             .username("kailas")
             .password(passwordEncoder().encode("KailasLdabhi"))
             .build();
-    return new InMemoryUserDetailsManager(userDetails);
+    // return new InMemoryUserDetailsManager(userDetails);
+    return new UserDetailsServiceImpl();
   }
 
   @Bean
@@ -65,6 +67,8 @@ public class SecurityConfigurations {
                 auth.requestMatchers("/employee/**")
                     .authenticated()
                     .requestMatchers("/auth/login")
+                    .permitAll()
+                    .requestMatchers("/auth/signin")
                     .permitAll()
                     .requestMatchers("/auth/signup")
                     .permitAll()

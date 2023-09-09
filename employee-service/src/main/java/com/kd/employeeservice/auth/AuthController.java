@@ -1,23 +1,32 @@
 package com.kd.employeeservice.auth;
 
+import com.kd.employeeservice.auth.models.RefreshToken;
 import com.kd.employeeservice.auth.models.Role;
 import com.kd.employeeservice.auth.models.User;
 import com.kd.employeeservice.auth.repository.RoleRepository;
 import com.kd.employeeservice.auth.repository.UserRepository;
+import com.kd.employeeservice.auth.request.LoginRequest;
 import com.kd.employeeservice.auth.request.SignupRequest;
 import com.kd.employeeservice.auth.response.MessageResponse;
+import com.kd.employeeservice.auth.security.UserDetailsImpl;
 import com.kd.employeeservice.auth.security.jwt.JwtUtils;
 import com.kd.employeeservice.auth.services.RefreshTokenService;
 import jakarta.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,6 +67,37 @@ public class AuthController {
     } catch (AuthenticationException e) {
       throw new RuntimeException("Authentication failed for some reason!", e);
     }
+  }
+
+  @PostMapping("/signin")
+  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+
+    Authentication authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(), loginRequest.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+    String jwt = this.jwtUtils.generateJwtToken(userDetails);
+
+    List<String> roles =
+        userDetails.getAuthorities().stream()
+            .map(item -> item.getAuthority())
+            .collect(Collectors.toList());
+
+    RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
+
+    return ResponseEntity.ok(
+        new com.kd.employeeservice.auth.response.JwtResponse(
+            jwt,
+            refreshToken.getToken(),
+            userDetails.getId(),
+            userDetails.getUsername(),
+            userDetails.getEmail(),
+            roles));
   }
 
   @PostMapping("/signup")
