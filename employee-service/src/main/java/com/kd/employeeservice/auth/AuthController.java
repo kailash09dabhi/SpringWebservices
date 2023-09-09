@@ -1,5 +1,6 @@
 package com.kd.employeeservice.auth;
 
+import com.kd.employeeservice.auth.exception.TokenRefreshException;
 import com.kd.employeeservice.auth.models.RefreshToken;
 import com.kd.employeeservice.auth.models.Role;
 import com.kd.employeeservice.auth.models.User;
@@ -7,7 +8,9 @@ import com.kd.employeeservice.auth.repository.RoleRepository;
 import com.kd.employeeservice.auth.repository.UserRepository;
 import com.kd.employeeservice.auth.request.LoginRequest;
 import com.kd.employeeservice.auth.request.SignupRequest;
+import com.kd.employeeservice.auth.request.TokenRefreshRequest;
 import com.kd.employeeservice.auth.response.MessageResponse;
+import com.kd.employeeservice.auth.response.TokenRefreshResponse;
 import com.kd.employeeservice.auth.security.UserDetailsImpl;
 import com.kd.employeeservice.auth.security.jwt.JwtUtils;
 import com.kd.employeeservice.auth.services.RefreshTokenService;
@@ -161,5 +164,24 @@ public class AuthController {
     userRepository.save(user);
 
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+  }
+
+  @PostMapping("/refreshtoken")
+  public ResponseEntity<?> refreshtoken(@Valid @RequestBody TokenRefreshRequest request) {
+    String requestRefreshToken = request.getRefreshToken();
+
+    return refreshTokenService
+        .findByToken(requestRefreshToken)
+        .map(refreshTokenService::verifyExpiration)
+        .map(RefreshToken::getUser)
+        .map(
+            user -> {
+              String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+              return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+            })
+        .orElseThrow(
+            () ->
+                new TokenRefreshException(
+                    requestRefreshToken, "Refresh token is not in database!"));
   }
 }
