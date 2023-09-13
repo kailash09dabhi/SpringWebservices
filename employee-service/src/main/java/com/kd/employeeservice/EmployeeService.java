@@ -126,4 +126,41 @@ public class EmployeeService {
             "/company/{id}", CompanyResponse.class, employee.getCurrentCompanyId()));
     return employeeResponse;
   }
+
+  public void deleteAllEmployeesOfCompany(Integer id) {
+    StringBuilder queryBuilder = new StringBuilder();
+    queryBuilder.append("select * from" + SPACE + EMPLOYEE_TABLE + SPACE + "e" + SPACE);
+    List<Object> employeeList = new ArrayList<>();
+    try {
+      queryBuilder.append("where e.current_company_id='").append(id).append("';");
+      EntityManagerFactory entityManagerFactory =
+          sessionFactory.createEntityManager().getEntityManagerFactory();
+      EntityManager entityManager = entityManagerFactory.createEntityManager();
+      Query query = entityManager.createNativeQuery(queryBuilder.toString());
+      employeeList.addAll(query.getResultList());
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println(e.toString());
+    }
+    List<Employee> employees =
+        employeeList.stream()
+            .map(
+                emp -> {
+                  Object[] arr = (Object[]) emp;
+                  Employee employee = new Employee();
+                  employee.setId((Integer) arr[0]);
+                  employee.setName((String) arr[1]);
+                  employee.setEmail((String) arr[2]);
+                  employee.setBloodgroup((String) arr[3]);
+                  employee.setCurrentCompanyId(arr[4] == null ? null : (Integer) arr[4]);
+                  employee.setExperience((Integer) arr[5]);
+                  return employee;
+                })
+            .toList();
+    employeeRepo.deleteAll(employees);
+  }
+
+//  public void deleteCompany(Integer id) {
+//    restTemplate.delete("/company/" + id);
+//  }
 }

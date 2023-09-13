@@ -20,4 +20,8 @@ public class CompanyService {
     List<Company> companyList = companyRepo.findAll();
     return companyList;
   }
+
+  public void delete(int id) {
+    companyRepo.deleteById(id);
+  }
 }

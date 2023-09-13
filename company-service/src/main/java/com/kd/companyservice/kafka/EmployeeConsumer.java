@@ -15,7 +15,7 @@ public class EmployeeConsumer {
   @Autowired CompanyService companyService;
 
   @KafkaListener(
-      topics = "${spring.kafka.topic.name}",
+      topics = "${kd.kafka.consumer.topic.name}",
       groupId = "${spring.kafka.consumer.group-id}")
   public void consume(EmployeeCreateEvent employeeCreateEvent) {
     LOGGER.info(
