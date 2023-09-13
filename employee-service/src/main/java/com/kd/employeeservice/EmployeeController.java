@@ -1,6 +1,10 @@
 package com.kd.employeeservice;
 
+import com.kd.employeeservice.kafka.EmployeeProducer;
 import java.util.List;
+
+import org.kd.common.EmployeeCreateEvent;
+import org.kd.common.EmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
 
   @Autowired EmployeeService employeeService;
+  @Autowired EmployeeProducer employeeProducer;
 
   @GetMapping("/employee/{id}")
   public ResponseEntity<EmployeeResponse> employee(@PathVariable("id") int id) {
@@ -43,6 +48,14 @@ public class EmployeeController {
   @PutMapping("/employee/create")
   public ResponseEntity<EmployeeResponse> createEmployee(@RequestBody Employee employee) {
     EmployeeResponse savedEmployee = employeeService.createEmployee(employee);
+    EmployeeDTO employeeDTO = new EmployeeDTO();
+    employeeDTO.setBloodgroup(savedEmployee.getBloodgroup());
+    employeeDTO.setEmail(savedEmployee.getEmail());
+    employeeDTO.setName(savedEmployee.getName());
+    employeeDTO.setId(savedEmployee.getId());
+    employeeDTO.setCurrentCompanyId(savedEmployee.getCurrentCompany().getId());
+    employeeDTO.setExperience(savedEmployee.getExperience());
+    employeeProducer.sendMessage(new EmployeeCreateEvent("Employee created!", employeeDTO));
     return ResponseEntity.status(HttpStatus.OK).body(savedEmployee);
   }
 
