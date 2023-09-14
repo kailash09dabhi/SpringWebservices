@@ -3,6 +3,7 @@ package com.kd.companyservice;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class CompanyService {
     return companyRepo.saveAndFlush(company);
   }
 
-  @Cacheable
+  @Cacheable("list")
   public List<Company> companies() {
     List<Company> companyList = companyRepo.findAll();
     return companyList;
@@ -29,6 +30,7 @@ public class CompanyService {
     companyRepo.deleteById(id);
   }
 
+  @CacheEvict(value = "list", allEntries = true)
   public Company updatedCompany(Company company) {
     Company savableCompany = company;
     if (companyRepo.existsById(company.getId())) {
